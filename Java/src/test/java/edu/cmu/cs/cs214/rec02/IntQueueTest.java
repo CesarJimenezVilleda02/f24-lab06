@@ -38,8 +38,8 @@ public class IntQueueTest {
     @Before
     public void setUp() {
         // comment/uncomment these lines to test each class
-        mQueue = new LinkedIntQueue();
-    //    mQueue = new ArrayIntQueue();
+        // mQueue = new LinkedIntQueue();
+       mQueue = new ArrayIntQueue();
 
         testList = new ArrayList<>(List.of(1, 2, 3));
     }
@@ -52,20 +52,19 @@ public class IntQueueTest {
 
     @Test
     public void testNotEmpty() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        mQueue.enqueue(1);
+        assertFalse(mQueue.isEmpty());
     }
 
     @Test
     public void testPeekEmptyQueue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        assertEquals(null, mQueue.peek());
     }
 
     @Test
     public void testPeekNoEmptyQueue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        mQueue.enqueue(1);
+        assertEquals(1, mQueue.peek().intValue());
     }
 
     @Test
@@ -80,8 +79,13 @@ public class IntQueueTest {
 
     @Test
     public void testDequeue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        // Add test values to queue
+        mQueue.enqueue(1);
+        mQueue.enqueue(2);
+
+        assertEquals(mQueue.dequeue().intValue(), 1);
+        assertEquals(mQueue.dequeue().intValue(), 2);
+        assertEquals(mQueue.dequeue(), null);
     }
 
     @Test
@@ -105,5 +109,37 @@ public class IntQueueTest {
         }
     }
 
+    @Test
+    public void testClear() {
+        mQueue.enqueue(1);
+        mQueue.enqueue(2);
+        mQueue.clear();
+        assertTrue(mQueue.isEmpty());
+    }
 
+    @Test
+    public void testEnqueueInitialCapacity() {
+        for (int i = 0; i < 10; i++) {
+            mQueue.enqueue(i);
+        }
+        assertFalse(mQueue.isEmpty());
+        assertEquals(10, mQueue.size());
+        assertEquals(Integer.valueOf(0), mQueue.peek());
+    }
+
+    @Test
+    public void testEnqueueAfterDequeueWrapsAround() {
+        for (int i = 0; i < 10; i++) {
+            mQueue.enqueue(i);
+        }
+        mQueue.dequeue(); // Remove 1 element
+        mQueue.dequeue(); // Remove 2nd element
+
+        for (int i = 0; i < 20; i++) {
+            mQueue.enqueue(i);
+        }
+
+        assertEquals(28, mQueue.size()); // Back to full capacity
+        assertEquals(Integer.valueOf(2), mQueue.peek()); // Head should be at element 2
+    }
 }
